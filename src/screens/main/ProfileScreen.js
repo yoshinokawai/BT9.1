@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Dimensions, Image } from 'react-native';
 import { AppContext } from '../../context/AppContext';
 
 const { width } = Dimensions.get('window');
@@ -14,10 +14,19 @@ const ProfileScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        {/* Blue Banner */}
-        <View style={styles.headerBanner} />
+        {/* Header containing blue banner and avatar */}
+        <View style={styles.headerSection}>
+          <View style={styles.headerBanner} />
+          <View style={styles.avatarContainer}>
+            <Image 
+              source={{ uri: 'https://i.pravatar.cc/150?img=11' }} 
+              style={styles.avatar} 
+            />
+          </View>
+        </View>
         
-        <View style={styles.contentContainer}>
+        {/* Info Section */}
+        <View style={styles.infoSection}>
           <Text style={styles.nameText}>Hung Nguyen</Text>
           <Text style={styles.roleText}>Mobile developer</Text>
           
@@ -42,16 +51,38 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  headerSection: {
+    alignItems: 'center',
+    marginBottom: 60,
+  },
   headerBanner: {
     width: '100%',
     height: width * 0.4,
     backgroundColor: '#00BFFF',
   },
-  contentContainer: {
-    flex: 1,
+  avatarContainer: {
+    position: 'absolute',
+    bottom: -50,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: '#FFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 2 },
+  },
+  avatar: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+  },
+  infoSection: {
     paddingHorizontal: 24,
     alignItems: 'center',
-    paddingTop: 40,
   },
   nameText: {
     fontSize: 24,

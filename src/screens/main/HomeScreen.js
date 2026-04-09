@@ -1,8 +1,55 @@
 import React from 'react';
-import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, SafeAreaView, Image } from 'react-native';
+import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Feather, Ionicons } from '@expo/vector-icons';
+import Section from '../../components/Section';
+
+const categoriesData = [
+  { id: '1', name: 'Pizza', color: '#FFDAB9' },
+  { id: '2', name: 'Burgers', color: '#FFDEAD' },
+  { id: '3', name: 'Steak', color: '#F4A460' },
+];
+
+const popularData = [
+  { id: '1', name: 'Food 1', subtitle: 'By Viet Nam', price: '1$', color: '#E0DDCE' },
+  { id: '2', name: 'Food 2', subtitle: 'By Viet Nam', price: '3$', color: '#D4E6D2' },
+];
+
+const saleOffData = [
+  { id: '1', discount: '10% OFF', color: '#E0DDCE' },
+  { id: '2', discount: null, color: '#D4E6D2' },
+];
 
 const HomeScreen = () => {
+
+  const renderCategoryItem = ({ item }) => (
+    <View style={styles.categoryItem}>
+      <View style={[styles.categoryImagePlaceholder, { backgroundColor: item.color }]} />
+      <Text style={styles.categoryName}>{item.name}</Text>
+    </View>
+  );
+
+  const renderPopularItem = ({ item }) => (
+    <View style={styles.itemCard}>
+      <View style={[styles.itemImagePlaceholder, { backgroundColor: item.color }]} />
+      <View style={styles.itemDetails}>
+        <Text style={styles.itemName}>{item.name}</Text>
+        <Text style={styles.itemSubtitle}>{item.subtitle}</Text>
+        <Text style={styles.itemPrice}>{item.price}</Text>
+      </View>
+    </View>
+  );
+
+  const renderSaleOffItem = ({ item }) => (
+    <View style={styles.itemCard}>
+      {item.discount && (
+        <View style={styles.discountBadge}>
+          <Text style={styles.discountText}>{item.discount}</Text>
+        </View>
+      )}
+      <View style={[styles.itemImagePlaceholder, { backgroundColor: item.color }]} />
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container}>
@@ -20,80 +67,33 @@ const HomeScreen = () => {
           </View>
         </View>
 
-        {/* Top Categories */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Top Categories</Text>
-          <TouchableOpacity style={styles.filterButton}>
-            <Feather name="filter" size={16} color="#FFA500" />
-            <Text style={styles.filterText}> Filter</Text>
-          </TouchableOpacity>
-        </View>
+        <Section
+          title="Top Categories"
+          actionText="Filter"
+          actionIcon={<Feather name="filter" size={16} color="#FFA500" />}
+          data={categoriesData}
+          renderItem={renderCategoryItem}
+          horizontal={true}
+          contentContainerStyle={styles.horizontalListContent}
+        />
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesContainer}>
-          <View style={styles.categoryItem}>
-            <View style={[styles.categoryImagePlaceholder, { backgroundColor: '#FFDAB9' }]} />
-            <Text style={styles.categoryName}>Pizza</Text>
-          </View>
-          <View style={styles.categoryItem}>
-            <View style={[styles.categoryImagePlaceholder, { backgroundColor: '#FFDEAD' }]} />
-            <Text style={styles.categoryName}>Burgers</Text>
-          </View>
-          <View style={styles.categoryItem}>
-            <View style={[styles.categoryImagePlaceholder, { backgroundColor: '#F4A460' }]} />
-            <Text style={styles.categoryName}>Steak</Text>
-          </View>
-        </ScrollView>
+        <Section
+          title="Popular Items"
+          actionText="View all"
+          data={popularData}
+          renderItem={renderPopularItem}
+          numColumns={2}
+          contentContainerStyle={styles.gridListContent}
+        />
 
-        {/* Popular Items */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Popular Items</Text>
-          <TouchableOpacity>
-            <Text style={styles.viewAllText}>View all</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.itemsGrid}>
-          {/* Card 1 */}
-          <View style={styles.itemCard}>
-            <View style={[styles.itemImagePlaceholder, { backgroundColor: '#E0DDCE' }]} />
-            <View style={styles.itemDetails}>
-              <Text style={styles.itemName}>Food 1</Text>
-              <Text style={styles.itemSubtitle}>By Viet Nam</Text>
-              <Text style={styles.itemPrice}>1$</Text>
-            </View>
-          </View>
-          {/* Card 2 */}
-          <View style={styles.itemCard}>
-            <View style={[styles.itemImagePlaceholder, { backgroundColor: '#D4E6D2' }]} />
-            <View style={styles.itemDetails}>
-              <Text style={styles.itemName}>Food 2</Text>
-              <Text style={styles.itemSubtitle}>By Viet Nam</Text>
-              <Text style={styles.itemPrice}>3$</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Repeated Popular Items for Layout Match */}
-        <View style={[styles.sectionHeader, { marginTop: 24 }]}>
-          <Text style={styles.sectionTitle}>Popular Items</Text>
-          <TouchableOpacity>
-            <Text style={styles.viewAllText}>View all</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.itemsGrid}>
-          {/* Card 3 */}
-          <View style={styles.itemCard}>
-            <View style={styles.discountBadge}>
-              <Text style={styles.discountText}>10% OFF</Text>
-            </View>
-            <View style={[styles.itemImagePlaceholder, { backgroundColor: '#E0DDCE' }]} />
-          </View>
-          {/* Card 4 */}
-          <View style={styles.itemCard}>
-            <View style={[styles.itemImagePlaceholder, { backgroundColor: '#D4E6D2' }]} />
-          </View>
-        </View>
+        <Section
+          title="Popular Items" // Keep the title from the image
+          actionText="View all"
+          data={saleOffData}
+          renderItem={renderSaleOffItem}
+          numColumns={2}
+          contentContainerStyle={styles.gridListContent}
+        />
 
       </ScrollView>
     </SafeAreaView>
@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: 'center',
     backgroundColor: '#FFF',
+    marginBottom: 8,
   },
   locationIcon: {
     padding: 8,
@@ -141,32 +142,12 @@ const styles = StyleSheet.create({
   searchIcon: {
     marginLeft: 8,
   },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    marginTop: 24,
-    marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  filterButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  filterText: {
-    color: '#FFA500',
-    fontWeight: '600',
-  },
-  viewAllText: {
-    color: '#FFA500',
-    fontWeight: '600',
-  },
-  categoriesContainer: {
+  horizontalListContent: {
     paddingLeft: 16,
+  },
+  gridListContent: {
+    paddingHorizontal: 16,
+    flexDirection: 'column', 
   },
   categoryItem: {
     alignItems: 'center',
@@ -182,16 +163,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
   },
-  itemsGrid: {
-    flexDirection: 'row',
-    paddingHorizontal: 16,
-    justifyContent: 'space-between',
-  },
   itemCard: {
-    width: '48%',
+    flex: 1,
     backgroundColor: '#FFF',
     borderRadius: 12,
     padding: 8,
+    marginHorizontal: 4,
+    marginBottom: 16,
     elevation: 2,
     shadowColor: '#000',
     shadowOpacity: 0.1,

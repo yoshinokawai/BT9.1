@@ -1,7 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { AppContext } from '../../context/AppContext';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
+
+import CustomTextInput from '../../components/CustomTextInput';
+import IconButton from '../../components/IconButton';
 
 const SignInScreen = ({ navigation }) => {
   const { setIsLoggedIn } = useContext(AppContext);
@@ -9,13 +12,7 @@ const SignInScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const handleSignIn = () => {
-    // Basic sign in logic here
-    if (email && password) {
-      setIsLoggedIn(true);
-    } else {
-      // Typically show an error, but let's just bypass for demo
-      setIsLoggedIn(true);
-    }
+    setIsLoggedIn(true);
   };
 
   return (
@@ -26,28 +23,22 @@ const SignInScreen = ({ navigation }) => {
       >
         <Text style={styles.title}>Sign In</Text>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Email ID</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your email here!"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-        </View>
+        <CustomTextInput
+          label="Email ID"
+          placeholder="Enter your email here!"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your password here!"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-        </View>
+        <CustomTextInput
+          label="Password"
+          placeholder="Enter your password here!"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
 
         <TouchableOpacity 
           style={styles.forgotPasswordContainer}
@@ -67,14 +58,20 @@ const SignInScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.socialButtonsContainer}>
-          <TouchableOpacity style={[styles.socialButton, styles.googleButton]}>
-            <AntDesign name="google" size={20} color="#DB4437" />
-            <Text style={styles.googleButtonText}> Google</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.socialButton, styles.facebookButton]}>
-            <FontAwesome name="facebook" size={20} color="white" />
-            <Text style={styles.facebookButtonText}> Facebook</Text>
-          </TouchableOpacity>
+          <IconButton
+            icon={<AntDesign name="google" size={20} color="#DB4437" />}
+            text="Google"
+            style={styles.googleButton}
+            textStyle={styles.googleButtonText}
+            onPress={() => {}}
+          />
+          <IconButton
+            icon={<FontAwesome name="facebook" size={20} color="white" />}
+            text="Facebook"
+            style={styles.facebookButton}
+            textStyle={styles.facebookButtonText}
+            onPress={() => {}}
+          />
         </View>
 
         <View style={styles.footerContainer}>
@@ -104,25 +101,6 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'center',
     marginBottom: 40,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#CCC',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    fontSize: 14,
-    backgroundColor: '#FAFAFA',
-    color: '#333',
   },
   forgotPasswordContainer: {
     alignItems: 'flex-end',
@@ -165,14 +143,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 40,
   },
-  socialButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingVertical: 14,
-    borderRadius: 8,
-  },
   googleButton: {
     backgroundColor: '#FFF',
     borderWidth: 1,
@@ -181,8 +151,6 @@ const styles = StyleSheet.create({
   },
   googleButtonText: {
     color: '#333',
-    fontWeight: '600',
-    marginLeft: 8,
   },
   facebookButton: {
     backgroundColor: '#4267B2',
@@ -190,8 +158,6 @@ const styles = StyleSheet.create({
   },
   facebookButtonText: {
     color: 'white',
-    fontWeight: '600',
-    marginLeft: 8,
   },
   footerContainer: {
     flexDirection: 'row',
