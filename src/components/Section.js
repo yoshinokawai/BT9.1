@@ -11,7 +11,7 @@ const SectionHeader = ({ title, actionText, actionIcon, onActionPress }) => (
   </View>
 );
 
-const Section = ({ title, actionText, actionIcon, onActionPress, data, renderItem, horizontal, numColumns, contentContainerStyle }) => {
+const Section = ({ title, actionText, actionIcon, onActionPress, data, renderItem, horizontal, contentContainerStyle }) => {
   return (
     <View style={styles.container}>
       <SectionHeader 
@@ -20,16 +20,24 @@ const Section = ({ title, actionText, actionIcon, onActionPress, data, renderIte
         actionIcon={actionIcon} 
         onActionPress={onActionPress} 
       />
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        horizontal={horizontal}
-        numColumns={numColumns}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={contentContainerStyle}
-        scrollEnabled={horizontal} // Disable scroll if it's a grid in a vertical scrollview
-      />
+      {horizontal ? (
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal={horizontal}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={contentContainerStyle}
+        />
+      ) : (
+        <View style={[styles.gridContainer, contentContainerStyle]}>
+          {data.map((item, index) => (
+             <View key={index.toString()} style={{ width: '50%' }}>
+               {renderItem({ item, index })}
+             </View>
+          ))}
+        </View>
+      )}
     </View>
   );
 };
@@ -56,6 +64,10 @@ const styles = StyleSheet.create({
   actionText: {
     color: '#FFA500',
     fontWeight: '600',
+  },
+  gridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 });
 
